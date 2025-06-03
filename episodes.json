@@ -1075,7 +1075,8 @@
         "duration_seconds": 3452.578,
         "analyzed_date": "2025-06-02T20:51:12.495586"
       },
-      "date": "2023-12-24"
+      "date": "2023-12-24",
+      "transcription_file_path_assemblyai": "catalog/435-revelation-part-twenty-seven-smoke-on-the-water-assemblyai.txt"
     },
     {
       "url": "https://www.voxologypodcast.com/434-practicing-the-way-with-john-mark-comer/",
@@ -1088,7 +1089,8 @@
         "duration_seconds": 5261.061292,
         "analyzed_date": "2025-06-02T20:51:12.628667"
       },
-      "date": "2023-12-17"
+      "date": "2023-12-17",
+      "transcription_file_path_assemblyai": "catalog/434-practicing-the-way-with-john-mark-comer-assemblyai.txt"
     },
     {
       "url": "https://www.voxologypodcast.com/433-revelation-part-twenty-six-the-lake-of-fire/",
@@ -1101,7 +1103,8 @@
         "duration_seconds": 4515.056375,
         "analyzed_date": "2025-06-02T20:51:12.755876"
       },
-      "date": "2023-12-10"
+      "date": "2023-12-10",
+      "transcription_file_path_assemblyai": "catalog/433-revelation-part-twenty-six-the-lake-of-fire-assemblyai.txt"
     },
     {
       "url": "https://www.voxologypodcast.com/432-the-god-who-hides/",
@@ -1114,7 +1117,8 @@
         "duration_seconds": 4638.093125,
         "analyzed_date": "2025-06-02T20:51:12.881774"
       },
-      "date": "2023-12-03"
+      "date": "2023-12-03",
+      "transcription_file_path_assemblyai": "catalog/432-the-god-who-hides-assemblyai.txt"
     },
     {
       "url": "https://www.voxologypodcast.com/431-the-only-way-out-is-through/",
@@ -1127,7 +1131,8 @@
         "duration_seconds": 3483.428625,
         "analyzed_date": "2025-06-02T20:51:13.038223"
       },
-      "date": "2023-11-26"
+      "date": "2023-11-26",
+      "transcription_file_path_assemblyai": "catalog/431-the-only-way-out-is-through-assemblyai.txt"
     },
     {
       "url": "https://www.voxologypodcast.com/430-the-god-who-disappoints-everyone/",
@@ -1140,7 +1145,8 @@
         "duration_seconds": 5216.182917,
         "analyzed_date": "2025-06-02T20:51:13.166800"
       },
-      "date": "2023-11-19"
+      "date": "2023-11-19",
+      "transcription_file_path_assemblyai": "catalog/430-the-god-who-disappoints-everyone-assemblyai.txt"
     },
     {
       "url": "https://www.voxologypodcast.com/429-revelation-part-twenty-five-babylon-continued/",
@@ -7096,5 +7102,5 @@
     22,
     23
   ],
-  "last_updated": "2025-06-02T22:46:51.432121"
+  "last_updated": "2025-06-02T22:53:27.998947"
 }

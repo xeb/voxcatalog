@@ -2,6 +2,8 @@
 
 A comprehensive AI-powered tool for downloading, transcribing, and organizing the Voxology podcast. The goal is to create a searchable catalog that organizes episodes into series and enhances episode discovery using modern AI technologies.
 
+💝 _This project was lovingly made entirely with [Claude Code](https://claude.ai/code) for <$20 of API credits_ 🤖✨
+
 ## 🎯 Purpose
 
 The Voxology Catalog aims to:
@@ -108,10 +110,10 @@ voxcatalog/
 ### series.json
 ```json
 {
-  "INDEPENDENT": {
-    "1": "catalog/episode-1.mp3",
-    "2": "catalog/episode-5.mp3"
-  },
+  "INDEPENDENT": [
+    "catalog/episode-1.mp3",
+    "catalog/episode-5.mp3"
+  ],
   "Exile Series": {
     "1": "catalog/exile-part-1.mp3", 
     "2": "catalog/exile-part-2.mp3"
@@ -153,16 +155,19 @@ Each script tracks its progress and can resume from where it left off:
 The Voxology podcast collection includes:
 - **23 pages** of episodes on the website
 - **538 total episodes** across all pages
-- Episodes include both **MP3** and **M4A** audio formats
-- **Average episode duration**: ~30 minutes
-- **Total collection**: ~245 hours of content
+- **100% episodes have dates** (538/538)
+- **Average episode duration**: ~60 minutes
+- **Total collection**: ~535 hours of content
+- **Storage requirements**: ~43GB for audio files
+- **Transcription progress**: 14.5% complete (78/538 episodes)
+- **Series identification**: 2 series discovered + independent episodes
 
 ## 💰 Cost Estimates
 
 Based on current collection:
-- **Total transcription cost**: ~$29 (at $0.12/hour)
-- **Average cost per episode**: ~$0.06
-- **Storage requirements**: ~15GB for audio files
+- **Total transcription cost**: ~$64.23 (at $0.12/hour)
+- **Remaining transcription cost**: ~$53.94 (460 episodes left)
+- **Average cost per episode**: ~$0.12
 
 ## 🎵 About Voxology
 

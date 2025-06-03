@@ -1,9 +1,9 @@
 {
-  "analysis_date": "2025-06-02T22:33:40.403494",
+  "analysis_date": "2025-06-02T22:49:39.084525",
   "total_episodes": 538,
   "episodes_with_dates": 538,
   "episodes_with_files": 538,
-  "episodes_with_transcriptions": 74,
+  "episodes_with_transcriptions": 78,
   "file_details": [
     {
       "title": "The Bible as a Cross Cultural Experience",
@@ -4866,27 +4866,27 @@
     "total_duration_formatted": "535:13:59",
     "average_duration_seconds": 3581.485320087363,
     "average_duration_formatted": "00:59:41",
-    "transcription_percentage": 13.8,
+    "transcription_percentage": 14.5,
     "transcription_counts": {
-      "total_with_transcriptions": 74,
+      "total_with_transcriptions": 78,
       "local_transcriptions": 0,
-      "assemblyai_transcriptions": 74
+      "assemblyai_transcriptions": 78
     },
     "cost_estimation": {
       "assemblyai_rate_per_hour": 0.12,
       "estimated_total_cost": 64.23,
-      "estimated_remaining_cost": 54.52,
+      "estimated_remaining_cost": 53.94,
       "total_hours_for_costing": 535.23
     },
     "transcription_analysis": {
-      "total_transcription_files": 74,
+      "total_transcription_files": 78,
       "local_transcription_files": 0,
-      "assemblyai_transcription_files": 74,
-      "total_file_size_bytes": 4578350,
-      "total_file_size_formatted": "4.37 MB",
-      "total_characters": 4578229,
-      "total_transcription_characters": 4159103,
-      "estimated_total_tokens": 831788,
+      "assemblyai_transcription_files": 78,
+      "total_file_size_bytes": 4855816,
+      "total_file_size_formatted": "4.63 MB",
+      "total_characters": 4855687,
+      "total_transcription_characters": 4408749,
+      "estimated_total_tokens": 881716,
       "failed_transcription_analyses": 0
     }
   }
