@@ -43,16 +43,16 @@ python stats.py
 
 📚 SERIES ANALYSIS
 ============================================================
-📊 Episodes parsed into series:   37.4% (201/538)
+📊 Episodes parsed into series:   37.9% (204/538)
 📖 Number of series identified:   33
-📈 Average episodes per series:   4.1
+📈 Average episodes per series:   4.2
 🎯 Independent episodes:          67
 
 📚 SERIES BREAKDOWN:
   📖 Revelation: 31 episodes
   📖 To Be Human: 25 episodes
+  📖 Understanding the Bible: 10 episodes
   📖 Image: 9 episodes
-  📖 Understanding the Bible: 7 episodes
   📖 Unified: 6 episodes
   📖 Exile: 5 episodes
   📖 Gospel Gombis: 5 episodes
