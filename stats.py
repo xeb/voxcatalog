@@ -25,6 +25,18 @@ def load_episodes_data():
         sys.exit(1)
 
 
+def load_series_data():
+    """Load series data from series.json if it exists."""
+    if os.path.exists('series.json'):
+        try:
+            with open('series.json', 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"Warning: Error loading series.json: {e}")
+            return {}
+    return {}
+
+
 def save_episodes_data(data):
     """Save updated episode data back to episodes.json."""
     data["last_updated"] = datetime.now().isoformat()
@@ -575,6 +587,59 @@ def main():
         if transcription_stats['total_transcription_characters'] > 0:
             chars_per_token = transcription_stats['total_transcription_characters'] / transcription_stats['total_estimated_tokens']
             print(f"🔢 Average chars per token:      {chars_per_token:.1f}")
+    
+    # Series analysis section
+    series_data = load_series_data()
+    if series_data:
+        print(f"\n📚 SERIES ANALYSIS")
+        print(f"=" * 60)
+        
+        # Count total episodes in series analysis
+        total_episodes_in_series = 0
+        series_list = []
+        
+        for series_name, episodes_in_series in series_data.items():
+            if series_name == "INDEPENDENT":
+                # INDEPENDENT episodes are stored as a list
+                episode_count = len(episodes_in_series) if isinstance(episodes_in_series, list) else len(episodes_in_series.values())
+            else:
+                # Regular series are stored as dictionaries
+                episode_count = len(episodes_in_series)
+                series_list.append((series_name, episode_count))
+            
+            total_episodes_in_series += episode_count
+        
+        # Calculate statistics
+        series_percentage = (total_episodes_in_series / len(episodes_with_files)) * 100 if episodes_with_files else 0
+        num_series = len(series_list)  # Exclude INDEPENDENT from series count
+        
+        # Calculate average episodes per series (excluding INDEPENDENT)
+        avg_episodes_per_series = sum(count for _, count in series_list) / num_series if num_series > 0 else 0
+        
+        # Display summary stats
+        print(f"📊 Episodes parsed into series:   {series_percentage:.1f}% ({total_episodes_in_series}/{len(episodes_with_files)})")
+        print(f"📖 Number of series identified:   {num_series}")
+        if num_series > 0:
+            print(f"📈 Average episodes per series:   {avg_episodes_per_series:.1f}")
+        
+        # Display INDEPENDENT count
+        independent_count = 0
+        if "INDEPENDENT" in series_data:
+            independent_episodes = series_data["INDEPENDENT"]
+            independent_count = len(independent_episodes) if isinstance(independent_episodes, list) else len(independent_episodes.values())
+            print(f"🎯 Independent episodes:          {independent_count}")
+        
+        # List all series with episode counts
+        if series_list:
+            print(f"\n📚 SERIES BREAKDOWN:")
+            # Sort by episode count (descending)
+            series_list.sort(key=lambda x: x[1], reverse=True)
+            for series_name, episode_count in series_list:
+                print(f"  📖 {series_name}: {episode_count} episodes")
+    else:
+        print(f"\n📚 SERIES ANALYSIS")
+        print(f"=" * 60)
+        print(f"📖 No series data found. Run 'make series' to analyze episodes.")
     
     # Cost estimation section
     print(f"\n💰 ASSEMBLYAI COST ESTIMATION (${assemblyai_cost_per_hour:.2f}/hour)")

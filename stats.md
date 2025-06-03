@@ -1,0 +1,91 @@
+python stats.py
+📊 Starting audio file statistics analysis...
+📂 Loading episode data...
+
+📋 Found 538 total episodes
+   📅 538 episodes have dates (100.0%)
+   📁 538 episodes have audio files
+   📝 538 episodes have transcriptions
+     🤖 0 with local transcriptions
+     🌐 538 with AssemblyAI transcriptions
+
+🔍 Analyzing 538 audio files...
+⚡ Used cached data for 538 episodes (faster analysis)
+
+🔍 Analyzing transcription files...
+✅ Analyzed 538 transcription files
+
+💾 Saving statistics to stats.json...
+✅ Statistics saved to stats.json
+
+📊 VOXOLOGY PODCAST STATISTICS
+============================================================
+📁 Total MP3 files analyzed:     538
+⚡ Used cached metadata:         538
+💾 Total size:                   43.35 GB (43.35 GB)
+⏱️  Total duration:               535:13:59 (535.2 hours)
+📊 Average episode duration:     00:59:41
+📝 Episodes with transcriptions: 100.0% (538/538)
+   🤖 Local transcriptions:      0
+   🌐 AssemblyAI transcriptions: 538
+
+📝 TRANSCRIPTION TEXT ANALYSIS
+============================================================
+📄 Total transcription files:    538
+   🤖 Local files:               0
+   🌐 AssemblyAI files:          538
+💾 Total transcription size:     29.08 MB
+🔤 Total characters (all):       30,492,470
+💬 Transcription text chars:     27,715,130
+🎯 Estimated tokens (LLM):       5,542,813
+📊 Text vs metadata ratio:       90.9% actual transcription
+🔢 Average chars per token:      5.0
+
+📚 SERIES ANALYSIS
+============================================================
+📊 Episodes parsed into series:   37.4% (201/538)
+📖 Number of series identified:   33
+📈 Average episodes per series:   4.1
+🎯 Independent episodes:          67
+
+📚 SERIES BREAKDOWN:
+  📖 Revelation: 31 episodes
+  📖 To Be Human: 25 episodes
+  📖 Image: 9 episodes
+  📖 Understanding the Bible: 7 episodes
+  📖 Unified: 6 episodes
+  📖 Exile: 5 episodes
+  📖 Gospel Gombis: 5 episodes
+  📖 The Cross-Shaped Life: 4 episodes
+  📖 The Culture Warrior Conversation: 4 episodes
+  📖 400th Episode Celebration Trilogy: 3 episodes
+  📖 Songs of Resistance Series: 3 episodes
+  📖 Insulted: 3 episodes
+  📖 Light: 3 episodes
+  📖 What Does It Mean To Be Biblical?: 2 episodes
+  📖 Being a Community of Justice: 2 episodes
+  📖 Disappointment with God: 2 episodes
+  📖 Challenging Biblical Masculinity: 2 episodes
+  📖 The Mind of Christ: 2 episodes
+  📖 The Wanderer: 2 episodes
+  📖 Exile Series: 1 episodes
+  📖 Submissive and Subversive: 1 episodes
+  📖 The Therapy Questionnaire: 1 episodes
+  📖 The Spirit of Our Politics: 1 episodes
+  📖 VOXOLOGY Rerun: 1 episodes
+  📖 Women as Elders: 1 episodes
+  📖 Men and Women Series: 1 episodes
+  📖 What's Up 1 Timothy: 1 episodes
+  📖 Revolutions and Revolutionaries: 1 episodes
+  📖 The Culture War Thing: 1 episodes
+  📖 Culture Warring: 1 episodes
+  📖 Centered Set Church Q&A: 1 episodes
+  📖 Reconstructing Faith: 1 episodes
+  📖 U2 and Theology: 1 episodes
+
+💰 ASSEMBLYAI COST ESTIMATION ($0.12/hour)
+============================================================
+💵 Total cost for all audio:     $64.23
+✅ All episodes transcribed!
+
+📋 Detailed statistics saved to: ./stats.json
