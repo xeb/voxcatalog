@@ -43,10 +43,10 @@ python stats.py
 
 📚 SERIES ANALYSIS
 ============================================================
-📊 Episodes parsed into series:   39.4% (212/538)
-📖 Number of series identified:   34
-📈 Average episodes per series:   4.1
-🎯 Independent episodes:          72
+📊 Episodes parsed into series:   40.9% (220/538)
+📖 Number of series identified:   36
+📈 Average episodes per series:   3.9
+🎯 Independent episodes:          78
 
 📚 SERIES BREAKDOWN:
   📖 Revelation: 31 episodes
@@ -83,6 +83,8 @@ python stats.py
   📖 Reconstructing Faith: 1 episodes
   📖 U2 and Theology: 1 episodes
   📖 Exiles in the Church: 1 episodes
+  📖 Elohim Series: 1 episodes
+  📖 Articulating the Story: 1 episodes
 
 💰 ASSEMBLYAI COST ESTIMATION ($0.12/hour)
 ============================================================

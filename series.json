@@ -71,7 +71,13 @@
     "catalog/302-lgbtq-and-the-new-creation.mp3",
     "catalog/301-masters-of-the-universe.mp3",
     "catalog/300-this-is-voxology-with-bonnie-lewis-shane-claiborne-dr-timothy-gombis.mp3",
-    "catalog/2999-the-new-name-game.m4a"
+    "catalog/2999-the-new-name-game.m4a",
+    "catalog/298-they-might-be-giants.mp3",
+    "catalog/297-should-i-stay-or-should-i-go-with-dr-timothy-gombis.mp3",
+    "catalog/296-the-myth-of-the-american-dream-with-dl-mayfield.mp3",
+    "catalog/295-this-present-darkness.mp3",
+    "catalog/294-rethinking-sin-salvation.mp3",
+    "catalog/293-misfit-tribe-with-shane-claiborne.mp3"
   ],
   "What Does It Mean To Be Biblical?": {
     "1": "catalog/why-biblical-might-not-mean-what-you-think.mp3",
@@ -283,5 +289,8 @@
   },
   "Elohim Series": {
     "1": "catalog/299-when-good-gods-go-bad.mp3"
+  },
+  "Articulating the Story": {
+    "2": "catalog/291-the-fires-of-new-creation.mp3"
   }
 }

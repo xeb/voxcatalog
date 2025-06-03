@@ -30,6 +30,7 @@ make download   # Download audio files
 make transcribe # AI transcription with AssemblyAI
 make series     # AI series analysis with Gemini
 make stats      # Generate comprehensive statistics
+make csv        # Export data to CSV format
 ```
 
 ### Development and Debugging
@@ -44,6 +45,7 @@ python get_audio_files.py        # Download audio files
 python transcribe-assemblyai.py  # Transcription only
 python parse_series.py           # Series analysis only
 python stats.py                  # Statistics only
+python parse_csv.py              # CSV export only
 ```
 
 ## Code Architecture
@@ -55,6 +57,7 @@ The project follows a strict sequential pipeline where each stage depends on the
 3. `catalog/*-assemblyai.txt` ← AI transcriptions
 4. `series.json` ← AI series analysis
 5. `stats.json` ← Comprehensive analytics
+6. `voxology_catalog.csv` ← CSV export for external analysis
 
 ### Key Components
 
@@ -82,6 +85,14 @@ The project follows a strict sequential pipeline where each stage depends on the
 - **Comprehensive metrics**: Audio duration, file sizes, transcription analysis, cost estimation
 - **Token estimation**: Calculates LLM token counts for transcription text
 - **Date tracking**: Reports episodes with/without dates and completion percentages
+- **Failed transcription detection**: Identifies episodes with missing transcription files
+- **Series analysis reporting**: Shows series parse percentages and episode distribution
+
+#### Data Export (`parse_csv.py`)
+- **CSV generation**: Exports combined series and episode data to spreadsheet format
+- **Cross-reference capability**: Matches series data with episode metadata (URLs, dates)
+- **Format handling**: Supports both INDEPENDENT list format and numbered series dictionaries
+- **Data validation**: Reports missing dates, URLs, and data inconsistencies
 
 ### Data Structures
 
@@ -95,6 +106,9 @@ AI-generated series organization:
 
 #### stats.json
 Complete analytics including audio statistics, transcription analysis, cost estimates, and progress tracking.
+
+#### voxology_catalog.csv
+Spreadsheet-friendly export with columns: series_name, episode_num, episode_date, episode_url, episode_file_path_mp3.
 
 ### API Integrations
 
@@ -129,6 +143,9 @@ Audio metadata is cached in `episodes.json` and reused based on file size matchi
 
 ### Series Analysis Logic
 Gemini AI receives current episode, previous episode context, and existing series data to make informed series classification decisions.
+
+### Statistical Reporting
+The stats module provides comprehensive reporting including failed transcription detection, series analysis percentages, and detailed breakdowns of all data types.
 
 ## Dependencies
 - `requests` + `beautifulsoup4`: Web scraping

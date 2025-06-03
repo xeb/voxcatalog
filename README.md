@@ -48,6 +48,9 @@ make series
 
 # 5. Generate comprehensive statistics (optional)
 make stats
+
+# 6. Export data to CSV format (optional)
+make csv
 ```
 
 ## 📋 Available Commands
@@ -61,6 +64,7 @@ make stats
 | `make transcribe` | Transcribe audio using AssemblyAI with speaker labels |
 | `make series` | Analyze transcriptions to identify series using Gemini AI |
 | `make stats` | Generate statistics (audio, transcriptions, tokens, costs) |
+| `make csv` | Export series and episode data to CSV format |
 
 ## 📁 Project Structure
 
@@ -72,9 +76,11 @@ voxcatalog/
 ├── transcribe-assemblyai.py       # AI transcription with speaker diarization
 ├── parse_series.py                # AI series analysis using Gemini
 ├── stats.py                       # Comprehensive statistics and analysis
+├── parse_csv.py                   # CSV data export
 ├── episodes.json                  # Master episode database
 ├── series.json                    # Series organization data
 ├── stats.json                     # Detailed statistics
+├── voxology_catalog.csv           # Spreadsheet-friendly data export
 ├── catalog/                       # Downloaded audio files and transcriptions
 ├── requirements.txt               # Python dependencies
 ├── Makefile                       # Command shortcuts
@@ -121,6 +127,14 @@ voxcatalog/
 }
 ```
 
+### voxology_catalog.csv
+```csv
+series_name,episode_num,episode_date,episode_url,episode_file_path_mp3
+INDEPENDENT,1,2025-01-15,https://www.voxologypodcast.com/episode-1/,catalog/episode-1.mp3
+Exile Series,1,2025-01-10,https://www.voxologypodcast.com/exile-part-1/,catalog/exile-part-1.mp3
+Exile Series,2,2025-01-12,https://www.voxologypodcast.com/exile-part-2/,catalog/exile-part-2.mp3
+```
+
 ## ✨ Features
 
 ### 🔄 Smart Processing
@@ -140,6 +154,8 @@ voxcatalog/
 - **Transcription Analysis**: Character counts, token estimates for LLM processing
 - **Cost Estimation**: AssemblyAI transcription costs at $0.12/hour
 - **Series Organization**: Automated categorization of episodes
+- **Failed Transcription Detection**: Identifies episodes needing retry
+- **CSV Export**: Spreadsheet-friendly data export for external analysis
 
 ## 🔄 Resume Capability
 
@@ -148,7 +164,8 @@ Each script tracks its progress and can resume from where it left off:
 - **Audio Links**: Skips episodes that already have audio_link field
 - **Downloads**: Skips files that already exist, updates JSON progressively
 - **Transcriptions**: Skips completed transcriptions, updates JSON per episode
-- **Series Analysis**: Processes episodes sequentially, saves progress continuously
+- **Series Analysis**: Skips already analyzed episodes, saves progress continuously
+- **CSV Export**: Generates fresh export from current data state
 
 ## 📊 Current Status
 
