@@ -63,3 +63,6 @@ stats: ## Generate statistics about audio files (duration, size, transcriptions)
 
 series: ## Analyze transcriptions to identify podcast series using Gemini AI
 	python parse_series.py
+
+csv: ## Export series and episode data to CSV format
+	python parse_csv.py

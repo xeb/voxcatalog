@@ -43,15 +43,15 @@ python stats.py
 
 📚 SERIES ANALYSIS
 ============================================================
-📊 Episodes parsed into series:   37.9% (204/538)
-📖 Number of series identified:   33
-📈 Average episodes per series:   4.2
-🎯 Independent episodes:          67
+📊 Episodes parsed into series:   39.4% (212/538)
+📖 Number of series identified:   34
+📈 Average episodes per series:   4.1
+🎯 Independent episodes:          72
 
 📚 SERIES BREAKDOWN:
   📖 Revelation: 31 episodes
   📖 To Be Human: 25 episodes
-  📖 Understanding the Bible: 10 episodes
+  📖 Understanding the Bible: 12 episodes
   📖 Image: 9 episodes
   📖 Unified: 6 episodes
   📖 Exile: 5 episodes
@@ -82,6 +82,7 @@ python stats.py
   📖 Centered Set Church Q&A: 1 episodes
   📖 Reconstructing Faith: 1 episodes
   📖 U2 and Theology: 1 episodes
+  📖 Exiles in the Church: 1 episodes
 
 💰 ASSEMBLYAI COST ESTIMATION ($0.12/hour)
 ============================================================

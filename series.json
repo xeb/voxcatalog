@@ -66,7 +66,12 @@
     "catalog/320-how-the-subjugation-of-women-became-gospel-truth-with-dr-beth-allison-barr.mp3",
     "catalog/319-knowing-gods-will-for-my-life.mp3",
     "catalog/317-midnight-mass-with-kaitlyn-schiess.mp3",
-    "catalog/315-gods-justice.mp3"
+    "catalog/315-gods-justice.mp3",
+    "catalog/304-the-nature-of-spiritual-abuse-with-dan-koch.mp3",
+    "catalog/302-lgbtq-and-the-new-creation.mp3",
+    "catalog/301-masters-of-the-universe.mp3",
+    "catalog/300-this-is-voxology-with-bonnie-lewis-shane-claiborne-dr-timothy-gombis.mp3",
+    "catalog/2999-the-new-name-game.m4a"
   ],
   "What Does It Mean To Be Biblical?": {
     "1": "catalog/why-biblical-might-not-mean-what-you-think.mp3",
@@ -263,7 +268,8 @@
     "5": "catalog/309-understanding-the-bible-part-five.mp3",
     "4": "catalog/308-understanding-the-bible-part-four-with-bradley-jersak.mp3",
     "3": "catalog/307-understanding-the-bible-part-three-with-dr-amy-jill-levine.mp3",
-    "2": "catalog/306-understanding-the-bible-part-two-with-joshua-ryan-butler.mp3"
+    "2": "catalog/306-understanding-the-bible-part-two-with-joshua-ryan-butler.mp3",
+    "1": "catalog/305-understanding-the-bible-part-one-with-dr-timothy-gombis.mp3"
   },
   "U2 and Theology": {
     "3": "catalog/the-wanderer-u2-there-is-no-them-there-is-only-us.mp3"
@@ -271,5 +277,11 @@
   "The Wanderer": {
     "2": "catalog/the-wanderer-u2-grief-grace-and-the-grotesque.mp3",
     "1": "catalog/the-wanderer-u2-not-all-who-wander-are-lost.mp3"
+  },
+  "Exiles in the Church": {
+    "3": "catalog/303-exiles-in-the-church.mp3"
+  },
+  "Elohim Series": {
+    "1": "catalog/299-when-good-gods-go-bad.mp3"
   }
 }
