@@ -12,6 +12,71 @@ import json
 from datetime import datetime
 import os
 from tqdm import tqdm
+import re
+
+def parse_episode_date(date_text):
+    """Parse episode date from text like 'June 2, 2025' or 'Sept. 18, 2022' to YYYY-MM-DD format."""
+    if not date_text:
+        return None
+    
+    try:
+        # Clean up the text
+        date_text = date_text.strip()
+        
+        # Quick hack: replace "Sept." with "Sep" to make it parseable
+        if "Sept." in date_text:
+            date_text = date_text.replace("Sept.", "Sep")
+        
+        # Remove trailing periods from abbreviated months
+        date_text = date_text.rstrip('.')
+        
+        # Parse date like "June 2, 2025" or "May 19, 2025"
+        date_obj = datetime.strptime(date_text, "%B %d, %Y")
+        return date_obj.strftime("%Y-%m-%d")
+    except ValueError:
+        try:
+            # Try abbreviated month format like "Sep 18, 2022"
+            date_obj = datetime.strptime(date_text, "%b %d, %Y")
+            return date_obj.strftime("%Y-%m-%d")
+        except ValueError:
+            try:
+                # Try with period still in place like "Dec. 18, 2022"
+                date_obj = datetime.strptime(date_text, "%b. %d, %Y")
+                return date_obj.strftime("%Y-%m-%d")
+            except ValueError:
+                print(f"Warning: Could not parse date '{date_text}'")
+                return None
+
+
+def merge_episode_data(existing_episodes, new_episodes, page_num):
+    """Merge new episode data with existing episodes, updating missing dates."""
+    # Create lookup for existing episodes by URL
+    existing_by_url = {ep['url']: ep for ep in existing_episodes if ep.get('page') == page_num}
+    
+    # Track what we've updated
+    updated_count = 0
+    new_count = 0
+    
+    # Process new episodes
+    for new_episode in new_episodes:
+        url = new_episode['url']
+        
+        if url in existing_by_url:
+            # Update existing episode with new date if it was missing
+            existing_episode = existing_by_url[url]
+            if ('date' not in existing_episode or existing_episode['date'] is None) and new_episode.get('date'):
+                existing_episode['date'] = new_episode['date']
+                updated_count += 1
+                print(f"  Updated date for: {existing_episode.get('title', 'Unknown')} → {new_episode['date']}")
+            # Also update title if it was missing
+            if not existing_episode.get('title') and new_episode.get('title'):
+                existing_episode['title'] = new_episode['title']
+        else:
+            # This is a new episode, add it
+            existing_episodes.append(new_episode)
+            new_count += 1
+    
+    return updated_count, new_count
 
 def load_existing_data():
     """Load existing episode data from JSON file."""
@@ -96,6 +161,13 @@ def extract_episode_links(html_content, page_num=1):
                 else:
                     title = title_element.get_text(strip=True)
             
+            # Try to get the episode date using the .mb-2 selector
+            date_element = card_body.find(class_='mb-2')
+            episode_date = None
+            if date_element:
+                date_text = date_element.get_text(strip=True)
+                episode_date = parse_episode_date(date_text)
+            
             if href:
                 # Make sure it's a full URL
                 if href.startswith('/'):
@@ -106,10 +178,11 @@ def extract_episode_links(html_content, page_num=1):
                 episode_data = {
                     "url": full_url,
                     "page": page_num,
-                    "title": title
+                    "title": title,
+                    "date": episode_date
                 }
                 episodes.append(episode_data)
-                print(f"Found episode: {full_url} - {title}")
+                print(f"Found episode: {full_url} - {title} ({episode_date})")
     
     # Fallback: if the above doesn't work, try the broader approach
     if not episodes:
@@ -124,7 +197,8 @@ def extract_episode_links(html_content, page_num=1):
                 episode_data = {
                     "url": href,
                     "page": page_num,
-                    "title": None
+                    "title": None,
+                    "date": None
                 }
                 episodes.append(episode_data)
                 print(f"Found via 'Listen' text: {href}")
@@ -139,7 +213,8 @@ def extract_episode_links(html_content, page_num=1):
                     episode_data = {
                         "url": full_url,
                         "page": page_num,
-                        "title": None
+                        "title": None,
+                        "date": None
                     }
                     episodes.append(episode_data)
                     print(f"Found mt-4 link: {full_url}")
@@ -158,10 +233,46 @@ def main():
     data = load_existing_data()
     processed_pages = set(data["processed_pages"])
     
+    # Check for episodes without dates and mark their pages for re-processing
+    pages_needing_date_update = set()
+    episodes_without_dates = 0
+    pages_with_missing_dates = {}  # Track which pages have episodes missing dates
+    
+    for episode in data["episodes"]:
+        page_num = episode.get('page', 1)
+        if 'date' not in episode or episode['date'] is None:
+            episodes_without_dates += 1
+            if page_num not in pages_with_missing_dates:
+                pages_with_missing_dates[page_num] = 0
+            pages_with_missing_dates[page_num] += 1
+            pages_needing_date_update.add(page_num)
+    
+    if episodes_without_dates > 0:
+        print(f"Found {episodes_without_dates} episodes without dates:")
+        for page_num in sorted(pages_with_missing_dates.keys()):
+            count = pages_with_missing_dates[page_num]
+            print(f"  Page {page_num}: {count} episodes missing dates")
+        print(f"Will re-process only these pages to update missing dates")
+        # Remove pages that need date updates from processed_pages so they get re-scraped
+        processed_pages = processed_pages - pages_needing_date_update
+    else:
+        print("✅ All episodes have dates - no pages need re-processing")
+    
     if processed_pages:
         print(f"Found existing data with {len(data['episodes'])} episodes from pages: {sorted(processed_pages)}")
     
-    # Test different URL patterns first (only if we haven't found a working one)
+    # Calculate which pages need processing (either new pages or pages needing date updates)
+    all_pages = set(range(1, 24))  # Pages 1-23
+    pages_to_process = (all_pages - processed_pages) | pages_needing_date_update
+    
+    # If no pages need processing, we're done
+    if not pages_to_process:
+        print("✅ All pages processed and all episodes have dates - nothing to do!")
+        return
+    
+    print(f"📄 Pages to process: {sorted(pages_to_process)}")
+    
+    # Test different URL patterns first (only if we need to process pages and haven't found a working one)
     test_urls = [
         "https://www.voxologypodcast.com/episodes/",
         "https://www.voxologypodcast.com/episodes",
@@ -171,8 +282,8 @@ def main():
     
     working_base_url = None
     for test_url in test_urls:
-        if 1 in processed_pages:
-            # We already know this works if page 1 was processed
+        if len(data["processed_pages"]) > 0:
+            # We already know this works if we've processed any pages before
             working_base_url = "https://www.voxologypodcast.com/episodes/"
             break
         
@@ -187,43 +298,51 @@ def main():
         print("❌ Could not find a working episodes URL")
         return
     
-    # Create overall progress bar for page processing (total 23 pages)
-    total_pages = 23
+    # Create overall progress bar for page processing (only pages that need processing)
+    total_pages_to_process = len(pages_to_process)
     with tqdm(
-        total=total_pages,
-        desc="📄 Pages Progress",
+        total=total_pages_to_process,
+        desc="📄 Processing Pages",
         unit="pages",
         ncols=100,
         position=0
     ) as overall_pbar:
         
-        # Update progress bar for already processed pages
-        overall_pbar.update(len(processed_pages))
-        
-        # Process page 1 if not already done
-        if 1 not in processed_pages:
-            print("Processing page 1...")
+        # Process page 1 if it needs processing
+        if 1 in pages_to_process:
+            if 1 in pages_needing_date_update:
+                print("Processing page 1 (updating missing dates)...")
+            else:
+                print("Processing page 1...")
             html_content = get_page_content(working_base_url)
             if html_content:
                 episodes = extract_episode_links(html_content, 1)
-                data["episodes"].extend(episodes)
-                data["processed_pages"].append(1)
+                
+                if 1 in pages_needing_date_update:
+                    # Merge with existing data to update dates
+                    updated_count, new_count = merge_episode_data(data["episodes"], episodes, 1)
+                    print(f"  Updated {updated_count} episodes with dates, added {new_count} new episodes")
+                else:
+                    # Add new episodes normally
+                    data["episodes"].extend(episodes)
+                    print(f"Found {len(episodes)} episodes on page 1")
+                
+                # Mark page as processed
+                if 1 not in data["processed_pages"]:
+                    data["processed_pages"].append(1)
                 
                 # Save after each page
                 save_data(data)
-                print(f"Found {len(episodes)} episodes on page 1")
                 overall_pbar.update(1)  # Update progress bar
                 
-                # Only continue if we found episodes on page 1
-                if len(episodes) == 0:
+                # Only continue if we found episodes on page 1 (for new processing)
+                if len(episodes) == 0 and 1 not in pages_needing_date_update:
                     print("No episodes found on page 1. Check debug_page.html for HTML structure.")
                     return
             else:
                 print("Could not fetch page 1")
                 overall_pbar.update(1)  # Update progress even on failure
                 return
-        else:
-            print("Page 1 already processed, skipping...")
         
         # Try different pagination URL patterns (only if we need to)
         pagination_patterns = [
@@ -235,7 +354,7 @@ def main():
         # Find working pagination pattern (skip if we already know it works)
         working_pagination_pattern = f"{working_base_url}?page={{}}"  # Default based on user feedback
         
-        if 2 not in processed_pages:
+        if 2 in pages_to_process:
             # Test page 2 with different patterns to find the working one
             for pattern in pagination_patterns:
                 test_url = pattern.format(2)
@@ -246,14 +365,16 @@ def main():
                     print(f"✓ Working pagination pattern: {pattern}")
                     break
         
-        # Process remaining pages
+        # Process remaining pages (only those that need processing)
         failed_pages = 0
         for page_num in range(2, 24):
-            if page_num in processed_pages:
-                print(f"Page {page_num} already processed, skipping...")
+            if page_num not in pages_to_process:
                 continue
                 
-            print(f"Processing page {page_num}...")
+            if page_num in pages_needing_date_update:
+                print(f"Processing page {page_num} (updating missing dates)...")
+            else:
+                print(f"Processing page {page_num}...")
             page_url = working_pagination_pattern.format(page_num)
             
             # Try to fetch the page, with retry logic
@@ -265,16 +386,26 @@ def main():
                 
             if html_content and not is_404_page(html_content):
                 episodes = extract_episode_links(html_content, page_num)
-                data["episodes"].extend(episodes)
-                data["processed_pages"].append(page_num)
+                
+                if page_num in pages_needing_date_update:
+                    # Merge with existing data to update dates
+                    updated_count, new_count = merge_episode_data(data["episodes"], episodes, page_num)
+                    print(f"  Updated {updated_count} episodes with dates, added {new_count} new episodes")
+                else:
+                    # Add new episodes normally
+                    data["episodes"].extend(episodes)
+                    print(f"Found {len(episodes)} episodes on page {page_num}")
+                
+                # Mark page as processed
+                if page_num not in data["processed_pages"]:
+                    data["processed_pages"].append(page_num)
                 
                 # Save after each page
                 save_data(data)
-                print(f"Found {len(episodes)} episodes on page {page_num}")
                 overall_pbar.update(1)  # Update progress bar
                 
-                # Stop if no episodes found (likely reached end)
-                if len(episodes) == 0:
+                # Stop if no episodes found (likely reached end) - but only for new processing
+                if len(episodes) == 0 and page_num not in pages_needing_date_update:
                     print(f"No episodes found on page {page_num}, stopping pagination")
                     break
                     

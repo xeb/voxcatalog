@@ -240,6 +240,11 @@ def main():
     episodes_with_files = [ep for ep in episodes if 'file_path' in ep and ep['file_path'] and os.path.exists(ep['file_path'])]
     episodes_without_files = [ep for ep in episodes if 'file_path' not in ep or not ep['file_path'] or not os.path.exists(ep.get('file_path', ''))]
     
+    # Filter episodes that have dates
+    episodes_with_dates = [ep for ep in episodes if 'date' in ep and ep['date'] is not None and ep['date'] != '']
+    episodes_without_dates = [ep for ep in episodes if 'date' not in ep or ep['date'] is None or ep['date'] == '']
+    date_percentage = (len(episodes_with_dates) / len(episodes)) * 100 if episodes else 0
+    
     # Filter episodes that have transcriptions (check both local and AssemblyAI)
     episodes_with_transcriptions_local = [ep for ep in episodes if 'transcription_file_path' in ep and ep['transcription_file_path'] and os.path.exists(ep['transcription_file_path'])]
     episodes_with_transcriptions_assemblyai = [ep for ep in episodes if 'transcription_file_path_assemblyai' in ep and ep['transcription_file_path_assemblyai'] and os.path.exists(ep['transcription_file_path_assemblyai'])]
@@ -251,10 +256,13 @@ def main():
     episodes_with_transcriptions_count = len(episodes_with_any_transcription)
     
     print(f"\n📋 Found {len(episodes)} total episodes")
+    print(f"   📅 {len(episodes_with_dates)} episodes have dates ({date_percentage:.1f}%)")
     print(f"   📁 {len(episodes_with_files)} episodes have audio files")
     print(f"   📝 {episodes_with_transcriptions_count} episodes have transcriptions")
     print(f"     🤖 {len(episodes_with_transcriptions_local)} with local transcriptions")
     print(f"     🌐 {len(episodes_with_transcriptions_assemblyai)} with AssemblyAI transcriptions")
+    if episodes_without_dates:
+        print(f"   ⚠️  {len(episodes_without_dates)} episodes missing dates")
     if episodes_without_files:
         print(f"   ⚠️  {len(episodes_without_files)} episodes missing audio files")
     
@@ -266,6 +274,7 @@ def main():
     stats = {
         'analysis_date': datetime.now().isoformat(),
         'total_episodes': len(episodes),
+        'episodes_with_dates': len(episodes_with_dates),
         'episodes_with_files': len(episodes_with_files),
         'episodes_with_transcriptions': episodes_with_transcriptions_count,
         'file_details': [],
@@ -438,6 +447,11 @@ def main():
         'failed_analyses': failed_analyses,
         'cached_analyses': cached_count,
         'new_analyses': new_analyses,
+        'date_statistics': {
+            'episodes_with_dates': len(episodes_with_dates),
+            'episodes_without_dates': len(episodes_without_dates),
+            'date_percentage': round(date_percentage, 1)
+        },
         'total_size_bytes': total_size,
         'total_size_gb': round(total_size_gb, 2),
         'total_size_formatted': format_file_size(total_size),

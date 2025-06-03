@@ -35,12 +35,21 @@ help:
 	@echo ""
 
 #====================================================================================================
-# Voxology Podcast Scraping Commands
+# Complete Workflow
 #====================================================================================================
-episodelinks: ## Scrape episode links from Voxology podcast website
+all: ## Run complete workflow: episodes -> download -> transcribe -> series -> stats
 	python get_episode_links.py
+	python get_episode_audio_links.py
+	python get_audio_files.py
+	python transcribe-assemblyai.py
+	python parse_series.py
+	python stats.py
 
-audiolinks: ## Extract MP3 audio links from episode pages
+#====================================================================================================
+# Individual Commands
+#====================================================================================================
+episodes: ## Scrape episode links/metadata and extract audio links
+	python get_episode_links.py
 	python get_episode_audio_links.py
 
 download: ## Download audio files to catalog directory
@@ -51,3 +60,6 @@ transcribe: ## Transcribe audio files using AssemblyAI with speaker diarization
 
 stats: ## Generate statistics about audio files (duration, size, transcriptions)
 	python stats.py
+
+series: ## Analyze transcriptions to identify podcast series using Gemini AI
+	python parse_series.py

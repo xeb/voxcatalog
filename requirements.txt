@@ -4,3 +4,4 @@ tqdm>=4.64.0
 git+https://github.com/openai/whisper.git 
 pyannote.audio
 assemblyai
+google-genai
