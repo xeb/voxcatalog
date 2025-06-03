@@ -255,6 +255,19 @@ def main():
     episodes_with_any_transcription.update(ep['url'] for ep in episodes_with_transcriptions_assemblyai)
     episodes_with_transcriptions_count = len(episodes_with_any_transcription)
     
+    # Filter episodes with failed transcriptions (have transcription path but file doesn't exist)
+    episodes_with_failed_transcriptions = []
+    for ep in episodes_with_files:
+        has_local_path = 'transcription_file_path' in ep and ep['transcription_file_path']
+        has_assemblyai_path = 'transcription_file_path_assemblyai' in ep and ep['transcription_file_path_assemblyai']
+        
+        local_exists = has_local_path and os.path.exists(ep['transcription_file_path'])
+        assemblyai_exists = has_assemblyai_path and os.path.exists(ep['transcription_file_path_assemblyai'])
+        
+        # Failed if has a transcription path but file doesn't exist
+        if (has_local_path and not local_exists) or (has_assemblyai_path and not assemblyai_exists):
+            episodes_with_failed_transcriptions.append(ep)
+    
     print(f"\n📋 Found {len(episodes)} total episodes")
     print(f"   📅 {len(episodes_with_dates)} episodes have dates ({date_percentage:.1f}%)")
     print(f"   📁 {len(episodes_with_files)} episodes have audio files")
@@ -265,6 +278,12 @@ def main():
         print(f"   ⚠️  {len(episodes_without_dates)} episodes missing dates")
     if episodes_without_files:
         print(f"   ⚠️  {len(episodes_without_files)} episodes missing audio files")
+    if episodes_with_failed_transcriptions:
+        example_file = episodes_with_failed_transcriptions[0].get('file_path', 'Unknown')
+        if len(episodes_with_failed_transcriptions) == 1:
+            print(f"   ❌ 1 episode has failed transcription: {example_file}")
+        else:
+            print(f"   ❌ {len(episodes_with_failed_transcriptions)} episodes have failed transcriptions (e.g., {example_file})")
     
     if not episodes_with_files:
         print("No episodes with audio files found. Run 'make download' first.")
@@ -277,7 +296,9 @@ def main():
         'episodes_with_dates': len(episodes_with_dates),
         'episodes_with_files': len(episodes_with_files),
         'episodes_with_transcriptions': episodes_with_transcriptions_count,
+        'episodes_with_failed_transcriptions': len(episodes_with_failed_transcriptions),
         'file_details': [],
+        'failed_transcriptions': [],
         'summary': {}
     }
     
@@ -348,6 +369,19 @@ def main():
     
     if cached_count > 0:
         print(f"⚡ Used cached data for {cached_count} episodes (faster analysis)")
+    
+    # Collect failed transcription details
+    for ep in episodes_with_failed_transcriptions:
+        failed_detail = {
+            'title': ep.get('title', 'Unknown'),
+            'url': ep['url'],
+            'file_path': ep.get('file_path', 'Unknown'),
+            'transcription_file_path': ep.get('transcription_file_path'),
+            'transcription_file_path_assemblyai': ep.get('transcription_file_path_assemblyai'),
+            'local_exists': ep.get('transcription_file_path') and os.path.exists(ep['transcription_file_path']),
+            'assemblyai_exists': ep.get('transcription_file_path_assemblyai') and os.path.exists(ep['transcription_file_path_assemblyai'])
+        }
+        stats['failed_transcriptions'].append(failed_detail)
     
     # Analyze transcription files
     print(f"\n🔍 Analyzing transcription files...")
@@ -555,6 +589,24 @@ def main():
     if episodes_without_files:
         print(f"\n⚠️  Note: {len(episodes_without_files)} episodes don't have audio files yet")
         print(f"   Run 'make download' to download missing files")
+    
+    # Failed transcriptions section
+    if episodes_with_failed_transcriptions:
+        print(f"\n❌ FAILED TRANSCRIPTION DETAILS")
+        print(f"=" * 60)
+        for i, failed_ep in enumerate(episodes_with_failed_transcriptions, 1):
+            print(f"{i}. {failed_ep.get('title', 'Unknown')}")
+            print(f"   📁 Audio: {failed_ep.get('file_path', 'Unknown')}")
+            
+            # Show which transcription paths exist/don't exist
+            if failed_ep.get('transcription_file_path'):
+                status = "✅ exists" if os.path.exists(failed_ep['transcription_file_path']) else "❌ missing"
+                print(f"   🤖 Local: {failed_ep['transcription_file_path']} ({status})")
+            
+            if failed_ep.get('transcription_file_path_assemblyai'):
+                status = "✅ exists" if os.path.exists(failed_ep['transcription_file_path_assemblyai']) else "❌ missing"
+                print(f"   🌐 AssemblyAI: {failed_ep['transcription_file_path_assemblyai']} ({status})")
+            print()
     
     print(f"\n📋 Detailed statistics saved to: ./stats.json")
 
