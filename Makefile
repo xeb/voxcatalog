@@ -44,6 +44,7 @@ all: ## Run complete workflow: episodes -> download -> transcribe -> series -> s
 	python transcribe-assemblyai.py
 	python parse_series.py
 	python stats.py
+	python parse_csv.py
 
 #====================================================================================================
 # Individual Commands
